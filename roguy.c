@@ -3,8 +3,8 @@
 #include <math.h>
 #include <ncurses.h>
 
-#define MAP_WIDTH 10
-#define MAP_HEIGHT 10
+#define MAP_WIDTH 40
+#define MAP_HEIGHT 20
 
 // Character class
 typedef struct {
@@ -61,6 +61,10 @@ int main(int argc, char* argv[]) {
 
   // Initialize the ncurses library
   initscr();
+  // Enable color support
+  start_color();
+  // Define a new color pair for the player character
+  init_pair(1, COLOR_GREEN, COLOR_BLACK);
 
   // Enable non-blocking input
   // nodelay(stdscr, TRUE);
@@ -147,7 +151,9 @@ void renderMap(Character* character) {
     for (int x = 0; x < MAP_WIDTH; x++) {
       if (x == MAP_WIDTH / 2 && y == MAP_HEIGHT / 2) {
         // Print the character symbol at the center of the map
+        attron(COLOR_PAIR(1));
         addch(character->symbol);
+        attroff(COLOR_PAIR(1));
       } else {
         // Get the tile at this position
         TileNode* tile = getTile(startX + x, startY + y);
